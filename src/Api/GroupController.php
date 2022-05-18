@@ -60,7 +60,7 @@ class GroupController {
         $body=json_decode(file_get_contents('php://input'),TRUE);
 
         $group = $this->repository->insertGroup(new GroupPayload(
-           $body["group_name"],
+           $body["group_name"]
         ));
 
         header("HTTP/1.1 200 OK");

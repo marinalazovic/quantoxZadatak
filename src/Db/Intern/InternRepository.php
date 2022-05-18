@@ -7,6 +7,8 @@ use \PDOException;
 use PhpApi\Model\Group\Group;
 use PhpApi\Model\Group\GroupPayload;
 use PhpApi\Model\Intern\Intern;
+use PhpApi\Model\Intern\InternData;
+use PhpApi\Model\Intern\InternDataId;
 use PhpApi\Model\Intern\InternFull;
 use PhpApi\Model\Intern\InternPayload;
 
@@ -55,6 +57,57 @@ class InternRepository {
                 $result[0]["last_name"],
                 new GroupPayload($result[0]["group_name"])
             );
+        } catch (PDOException $e) {
+            exit($e->getMessage().PHP_EOL);
+        }
+    }
+
+    public function insert(InternData $internData) {
+        $sql = "INSERT INTO intern (first_name, last_name, group_id) VALUES (:first_name, :last_name, :group_id)";
+        try {
+            $query=$this->connection->prepare($sql);
+            $query->execute([
+                "first_name" => $internData->firstName,
+                "last_name" => $internData->lastName,
+                "group_id" => $internData->groupId
+            ]);
+
+            return new InternDataId(
+                $this->connection->lastInsertId(),
+                $internData->firstName,
+                $internData->lastName,
+                $internData->groupId
+            );
+
+        } catch (PDOException $e) {
+            exit($e->getMessage().PHP_EOL);
+        }
+
+    }
+
+    public function update(InternDataId $intern)
+    {
+        $sql = "UPDATE intern SET first_name= :first_name, last_name= :last_name, group_id= :group_id WHERE id = :id";
+        try {
+            $query=$this->connection->prepare($sql);
+
+            $query->execute([
+               "first_name" => $intern->firstName,
+               "last_name" => $intern->lastName,
+               "group_id" => $intern->groupId,
+                "id" => $intern->id
+            ]);
+            return $intern;
+        } catch (PDOException $e) {
+            exit($e->getMessage().PHP_EOL);
+        }
+    }
+
+    public function delete(int $id) {
+        $sql = "DELETE FROM intern WHERE id = :id";
+        try {
+            $query = $this->connection->prepare($sql);
+            $query->execute(["id" => $id]);
         } catch (PDOException $e) {
             exit($e->getMessage().PHP_EOL);
         }

@@ -9,7 +9,7 @@ use PhpApi\Model\Group\Group;
 class InternFull extends Intern {
     public GroupPayload $grupa;
 
-    public function __construct(int $id, string $firstName, string $lastName, Group $grupa)
+    public function __construct(int $id, string $firstName, string $lastName, GroupPayload $grupa)
     {
         parent::__construct($id, $firstName, $lastName);
         $this->grupa=$grupa;

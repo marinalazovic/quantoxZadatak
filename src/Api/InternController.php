@@ -3,6 +3,8 @@
 namespace PhpApi\Api;
 
 use PhpApi\Db\Intern\InternRepository;
+use PhpApi\Model\Intern\InternData;
+use PhpApi\Model\Intern\InternDataId;
 
 class InternController {
     private InternRepository $repository;
@@ -38,24 +40,52 @@ class InternController {
 
     private function getInternById($id)
     {
+        $intern = $this->repository->getInternById($id);
+        header("HTTP/1.1 200 OK");
+        echo json_encode($intern);
     }
 
     private function getAllIntern()
     {
+        $interns= $this->repository->getAllIntern();
+        header("HTTP/1.1 200 OK");
+        echo json_encode($interns);
     }
 
     private function postInsertIntern()
     {
+        $body = json_decode(file_get_contents('php://input'), TRUE);
+        $intern = $this->repository->insert(new InternData(
+            $body["first_name"],
+            $body["last_name"],
+            $body["group_id"]
+        ));
+
+        header("HTTP/1.1 200 OK");
+        echo json_encode($intern);
     }
 
     private function putUpdateIntern($id)
     {
+        $body = json_decode(file_get_contents('php://input'), TRUE);
+
+        $intern = $this->repository->update(new InternDataId(
+            $id,
+            $body["first_name"],
+            $body["last_name"],
+            $body["group_id"]
+        ));
+        header("HTTP/1.1 200 OK");
+        echo json_encode($intern);
     }
 
     private function deleteIntern($id)
     {
+        $this->repository->delete($id);
+        header("HTTP/1.1 200 OK");
     }
     private function notFoundResponse()
     {
+        header("HTTP/1.1 404 Not Found");
     }
 }

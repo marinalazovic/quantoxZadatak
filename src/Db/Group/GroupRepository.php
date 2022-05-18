@@ -83,11 +83,11 @@ class GroupRepository {
     }
 
     public function insertGroup(GroupPayload $payload){
-        $sql="INSERT INTO groupQ (group_name) VALUES (:group_name)";
+        $sql="INSERT INTO groupQ (group_name) VALUES ( :gruop_name)";
         try {
             $query=$this->connection->prepare($sql);
             $query->execute([
-               "gruop_name"=>$payload->groupName
+               "gruop_name" => $payload->groupName
             ]);
             return new Group(
                 $this->connection->lastInsertId(),
@@ -98,7 +98,7 @@ class GroupRepository {
         }
     }
     public function updateGroup(Group $group) {
-        $sql = "UPDATE groupQ SET group_neme= :group_name WHERE id=:id";
+        $sql = "UPDATE groupQ SET group_name= :group_name WHERE id= :id";
         try {
             $query=$this->connection->prepare($sql);
             $query->execute([
