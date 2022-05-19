@@ -17,16 +17,14 @@ function execController()
     $paramsArray= array();
     parse_str($params, $paramsArray);
 
-    $limit = null;
-    $page = null;
-    $sort =  null;
-    $order= null;
 
 
-    $limit=$paramsArray["limit"] ? $paramsArray["limit"]:null;
-    $page=$paramsArray["page"] ? $paramsArray["page"]:null;
-    $sort=$paramsArray["sort"] ? $paramsArray["sort"]:null;
-    $order=$paramsArray["order"] ? $paramsArray["order"]:null;
+
+    $limit=array_key_exists("limit",$paramsArray)? $paramsArray["limit"]:null;
+    $page=array_key_exists("page",$paramsArray)? $paramsArray["page"]:null;
+    $sort=array_key_exists("sort",$paramsArray)? $paramsArray["sort"]:null;
+    $order=array_key_exists("order",$paramsArray)? $paramsArray["order"]:null;
+
 
 
 
@@ -39,7 +37,8 @@ function execController()
     if(isset($uri[3]) && is_numeric($uri[3]))
         $id=intval($uri[3]);
 
-    if(count($uri)>3) {
+    if(count($uri)>4) {
+
         if($uri[2] === "mentor" && is_numeric($uri[3]) && $uri[4] === "intern" && is_numeric($uri[5]) && $uri[6] === "comment" ) {
             $mentorId=intval($uri[3]);
             $internId= intval($uri[5]);
@@ -56,6 +55,7 @@ function execController()
         }
     }
     else {
+        echo "else";
         switch ($uri[2]) {
             case GROUP_ROUTE_COMPONENT:
                 headers();
