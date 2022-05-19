@@ -14,13 +14,13 @@ class InternController {
         $this->repository=new InternRepository($connection);
     }
 
-    public function exec($requestMethod, $id) {
+    public function exec($requestMethod, $id,$sort,$order,$limit, $page) {
         switch ($requestMethod){
             case"GET":
                 if($id)
                     $this->getInternById($id);
                 else
-                    $this->getAllIntern();
+                    $this->getAllIntern($sort,$order,$limit, $page);
                 break;
             case"POST":
                 $this->postInsertIntern();
@@ -45,9 +45,13 @@ class InternController {
         echo json_encode($intern);
     }
 
-    private function getAllIntern()
+    private function getAllIntern($sort,$order,$limit, $page)
     {
-        $interns= $this->repository->getAllIntern();
+        if($sort !== null && $order !== null)
+            $interns= $this->repository->getAllIntern($sort,$order,$limit, $page);
+        else
+            $interns= $this->repository->getAllIntern($limit, $page);
+
         header("HTTP/1.1 200 OK");
         echo json_encode($interns);
     }

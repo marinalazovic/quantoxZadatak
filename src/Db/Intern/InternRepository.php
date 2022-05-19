@@ -20,9 +20,12 @@ class InternRepository {
         $this->connection=$connection;
     }
 
-    public function getAllIntern(){
-        $sql= "SELECT i.id as intern_id, i.first_name, i.last_name, g.id as group_id ,g.group_name
-               FROM intern i INNER JOIN groupQ g on i.group_id=g.id";
+    public function getAllIntern($sort = "id",$order = "asc", $limit, $page){
+        $pagination=" ";
+        if($limit !== null && $page !== null)
+            $pagination=" LIMIT ".intval($limit)." OFFSET ".intval($page);
+        $sql= "SELECT i.id as id, i.first_name as first_name, i.last_name as last_name, g.id as group_id ,g.group_name as group_name
+               FROM intern i INNER JOIN groupQ g on i.group_id=g.id ORDER BY ".$sort." ".$order.$pagination;
 
         try {
             $query = $this->connection->query($sql);
@@ -31,7 +34,7 @@ class InternRepository {
 
             foreach( $result as $intern ) {
                 array_push($interns,
-                new InternFull($intern["intern_id"],$intern["first_name"],$intern["last_name"], new GroupPayload($intern["group_name"])));
+                new InternFull($intern["id"],$intern["first_name"],$intern["last_name"], new GroupPayload($intern["group_name"])));
             }
 
             return $interns;

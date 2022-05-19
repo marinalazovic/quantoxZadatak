@@ -16,13 +16,13 @@ class MentorController
        $this->repository = new MentorRepository($conncection);
    }
 
-   public function exec($requestMethod, $id) {
+   public function exec($requestMethod, $id,$sort,$order,$limit, $page) {
        switch ($requestMethod) {
            case "GET":
                if($id)
                    $this->getMentorById($id);
                else
-                   $this->getAllMentors();
+                   $this->getAllMentors($sort,$order,$limit, $page);
                break;
            case "POST":
                    $this->postCreate();
@@ -45,9 +45,12 @@ class MentorController
         echo json_encode($mentor);
     }
 
-    private function getAllMentors()
+    private function getAllMentors($sort,$order,$limit, $page)
     {
-        $mentors = $this->repository->getAllMentors();
+        if($sort !== null && $order !== null)
+             $mentors = $this->repository->getAllMentors($sort,$order,$limit, $page);
+        else
+            $mentors = $this->repository->getAllMentors($limit, $page);
         header("HTTP:1.1 200 OK");
         echo json_encode($mentors);
     }

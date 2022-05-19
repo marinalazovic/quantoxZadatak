@@ -17,13 +17,14 @@ class GroupController {
         $this->repository= new GroupRepository($connection);
     }
 
-    public function exec($requestMethod, $id) {
+    public function exec($requestMethod, $id,$sort,$order, $limit, $page) {
         switch ($requestMethod){
             case "GET":
                 if($id)
                     $this->getGroupById($id);
                 else
-                    $this->getAllGroup();
+                    $this->getAllGroup($sort,$order,$limit, $page);
+
                 break;
             case "POST":
                 $this->postInsertGroup();
@@ -38,9 +39,12 @@ class GroupController {
                 $this->notFoundResponse();
         }
     }
-    private function getAllGroup()
+    private function getAllGroup($sort,$order, $limit, $page)
     {
-        $allGroup=$this->repository->getAllGroup();
+        if($sort !== null && $order !== null)
+            $allGroup=$this->repository->getAllGroup($sort,$order, $limit, $page);
+        else
+            $allGroup=$this->repository->getAllGroup($limit, $page);
 
         header("HTTP/1.1 200 OK");
         echo json_encode($allGroup);

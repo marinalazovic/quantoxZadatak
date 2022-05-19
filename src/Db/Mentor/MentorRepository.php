@@ -17,9 +17,13 @@ class MentorRepository {
         $this->connection=$connection;
     }
 
-    public function getAllMentors() {
-        $sql = "SELECT m.id, m.first_name, m.last_name, m.years_of_experience, g.group_name
-                FROM mentor m INNER JOIN groupQ g on m.group_id = g.id";
+    public function getAllMentors($sort="id", $order="asc",$limit, $page) {
+        $pagination="";
+        if($limit !== null && $page !== null)
+            $pagination=" LIMIT ".intval($limit)." OFFSET ".intval($page);
+        $sql = "SELECT m.id as id, m.first_name, m.last_name, m.years_of_experience, g.group_name
+                FROM mentor m INNER JOIN groupQ g on m.group_id = g.id
+                ORDER BY ".$sort." ".$order.$pagination;
         try {
             $query = $this->connection->query($sql);
             $result=$query->fetchAll(PDO::FETCH_ASSOC);

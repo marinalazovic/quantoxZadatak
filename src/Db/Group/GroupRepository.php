@@ -17,8 +17,11 @@ class GroupRepository {
         $this->connection = $connection;
     }
 
-    public function getAllGroup() {
-        $sql="SELECT id, group_name FROM groupQ";
+    public function getAllGroup($sort="id", $order="asc", $limit, $page) {
+        $pagination="";
+        if($limit !== null && $page !== null)
+            $pagination=" LIMIT ".intval($limit)." OFFSET ".intval($page);
+        $sql="SELECT id, group_name FROM groupQ ORDER BY ".$sort." ".$order.$pagination;
 
         try {
             $query=$this->connection->query($sql);
