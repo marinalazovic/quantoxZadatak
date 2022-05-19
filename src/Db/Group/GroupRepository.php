@@ -17,7 +17,7 @@ class GroupRepository {
         $this->connection = $connection;
     }
 
-    public function getAllGroup($sort="id", $order="asc", $limit, $page) {
+    public function getAllGroup( $limit, $page, $sort="id", $order="asc") {
         $pagination="";
         if($limit !== null && $page !== null)
             $pagination=" LIMIT ".intval($limit)." OFFSET ".intval($page);

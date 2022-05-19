@@ -6,8 +6,10 @@ use PhpApi\Db\Database;
 
 $sql = <<<EOS
 
+DROP TABLE IF EXISTS  comment;
+DROP TABLE IF EXISTS  mentor;
+DROP TABLE IF EXISTS  intern;
 DROP TABLE IF EXISTS  groupQ;
-
 CREATE TABLE groupQ(
     id INT NOT NULL AUTO_INCREMENT,
     group_name VARCHAR(50) NOT NULL,
@@ -28,7 +30,7 @@ insert into groupQ (group_name) values ('lkiehne9');
 
 
 
-DROP TABLE IF EXISTS  mentor;
+
 
 CREATE TABLE mentor(
     id INT NOT NULL AUTO_INCREMENT,
@@ -51,7 +53,7 @@ insert into mentor (first_name, last_name, years_of_experience, group_id) values
 insert into mentor (first_name, last_name, years_of_experience, group_id) values ('Nathaniel', 'Rosander', 9, 9);
 insert into mentor (first_name, last_name, years_of_experience, group_id) values ('Gardner', 'Sapauton', 10, 10);
 
-DROP TABLE IF EXISTS  intern;
+
 
 CREATE TABLE intern(
     id INT NOT NULL AUTO_INCREMENT,
@@ -62,7 +64,7 @@ CREATE TABLE intern(
     FOREIGN KEY (group_id) REFERENCES groupQ(id)
 );
 
-insert into intern (first_name, last_name, group_id) values ('Fran', 'Windsor', 1);
+insert into intern (first_name, last_name, group_id) values ('Marina', 'Lazovic', 1);
 insert into intern (first_name, last_name, group_id) values ('Melodie', 'Cumo', 2);
 insert into intern (first_name, last_name, group_id) values ('Charline', 'Finney', 3);
 insert into intern (first_name, last_name, group_id) values ('Suki', 'Sara', 4);
@@ -72,6 +74,19 @@ insert into intern (first_name, last_name, group_id) values ('Zelig', 'Trase', 7
 insert into intern (first_name, last_name, group_id) values ('Elie', 'Akehurst', 8);
 insert into intern (first_name, last_name, group_id) values ('Nicola', 'Brolan', 9);
 insert into intern (first_name, last_name, group_id) values ('Noam', 'Adamiec', 10);
+
+
+
+CREATE TABLE comment(
+    id INT NOT NULL AUTO_INCREMENT,
+    text TEXT NOT NULL,
+    date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    intern_id int(11) NOT NULL,
+    mentor_id int(11) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (intern_id) REFERENCES intern(id),
+    FOREIGN KEY (mentor_id) REFERENCES mentor(id)
+);
 EOS;
 
 

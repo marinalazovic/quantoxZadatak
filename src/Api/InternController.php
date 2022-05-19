@@ -48,7 +48,7 @@ class InternController {
     private function getAllIntern($sort,$order,$limit, $page)
     {
         if($sort !== null && $order !== null)
-            $interns= $this->repository->getAllIntern($sort,$order,$limit, $page);
+            $interns= $this->repository->getAllIntern($limit, $page,$sort,$order);
         else
             $interns= $this->repository->getAllIntern($limit, $page);
 

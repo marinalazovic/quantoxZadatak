@@ -48,7 +48,7 @@ class MentorController
     private function getAllMentors($sort,$order,$limit, $page)
     {
         if($sort !== null && $order !== null)
-             $mentors = $this->repository->getAllMentors($sort,$order,$limit, $page);
+             $mentors = $this->repository->getAllMentors($limit, $page,$sort,$order);
         else
             $mentors = $this->repository->getAllMentors($limit, $page);
         header("HTTP:1.1 200 OK");

@@ -17,7 +17,7 @@ class MentorRepository {
         $this->connection=$connection;
     }
 
-    public function getAllMentors($sort="id", $order="asc",$limit, $page) {
+    public function getAllMentors($limit, $page, $sort="id", $order="asc") {
         $pagination="";
         if($limit !== null && $page !== null)
             $pagination=" LIMIT ".intval($limit)." OFFSET ".intval($page);

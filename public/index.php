@@ -17,11 +17,17 @@ function execController()
     $paramsArray= array();
     parse_str($params, $paramsArray);
 
-    $limit = $paramsArray["limit"] ? $paramsArray["limit"] : null;
-    $page = $paramsArray["page"] ? $paramsArray["page"] : null;
+    $limit = null;
+    $page = null;
+    $sort =  null;
+    $order= null;
 
-    $sort = $paramsArray["sort"] ? $paramsArray["sort"] : null;
-    $order = $paramsArray["order"] ? $paramsArray["order"] : null;
+
+    $limit=$paramsArray["limit"] ? $paramsArray["limit"]:null;
+    $page=$paramsArray["page"] ? $paramsArray["page"]:null;
+    $sort=$paramsArray["sort"] ? $paramsArray["sort"]:null;
+    $order=$paramsArray["order"] ? $paramsArray["order"]:null;
+
 
 
     if($uri[1]!== API_ROUTE_COMPONENT)
@@ -33,22 +39,47 @@ function execController()
     if(isset($uri[3]) && is_numeric($uri[3]))
         $id=intval($uri[3]);
 
-    switch ($uri[2]) {
-        case GROUP_ROUTE_COMPONENT:
+    if(count($uri)>3) {
+        if($uri[2] === "mentor" && is_numeric($uri[3]) && $uri[4] === "intern" && is_numeric($uri[5]) && $uri[6] === "comment" ) {
+            $mentorId=intval($uri[3]);
+            $internId= intval($uri[5]);
+            $commentId=null;
+
+            if(isset($uri[7]) && is_numeric($uri[7]))
+                $commentId=intval($uri[7]);
+
             headers();
-            execGroupController($requestMethod,$id,$sort,$order,$limit, $page);
-            break;
-        case INTERN_ROUTE_COMPONENT:
-            headers();
-            execInternController($requestMethod,$id,$sort,$order,$limit, $page);
-            break;
-        case MENTOR_ROUTE_COMPONENT:
-            headers();
-            execMentorController($requestMethod,$id,$sort,$order,$limit, $page);
-            break;
-        default:
+            execCommentController($requestMethod,$mentorId, $internId,$commentId);
+        }
+        else {
             notFound();
+        }
     }
+    else {
+        switch ($uri[2]) {
+            case GROUP_ROUTE_COMPONENT:
+                headers();
+                execGroupController($requestMethod,$id,$sort,$order,$limit, $page);
+                break;
+            case INTERN_ROUTE_COMPONENT:
+                headers();
+                execInternController($requestMethod,$id,$sort,$order,$limit, $page);
+                break;
+            case MENTOR_ROUTE_COMPONENT:
+                headers();
+                execMentorController($requestMethod,$id,$sort,$order,$limit, $page);
+                break;
+            default:
+                notFound();
+        }
+    }
+}
+
+function execCommentController($requestMethod, $mentorId, $internId, $commentId)
+{
+    $db= new \PhpApi\Db\Database();
+    $controller= new \PhpApi\Api\CommentController($db->getConnection());
+    $controller->exec($requestMethod, $mentorId, $internId, $commentId);
 }
 
 function execGroupController($requestMethod, ?int $id,$sort,$order, $limit, $page)

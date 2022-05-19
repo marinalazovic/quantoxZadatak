@@ -20,7 +20,7 @@ class InternRepository {
         $this->connection=$connection;
     }
 
-    public function getAllIntern($sort = "id",$order = "asc", $limit, $page){
+    public function getAllIntern($limit, $page,$sort = "id",$order = "asc"){
         $pagination=" ";
         if($limit !== null && $page !== null)
             $pagination=" LIMIT ".intval($limit)." OFFSET ".intval($page);
