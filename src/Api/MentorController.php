@@ -47,10 +47,8 @@ class MentorController
 
     private function getAllMentors($sort,$order,$limit, $page)
     {
-        if($sort !== null && $order !== null)
-             $mentors = $this->repository->getAllMentors($limit, $page,$sort,$order);
-        else
-            $mentors = $this->repository->getAllMentors($limit, $page);
+        $mentors = $this->repository->getAllMentors($limit, $page,$sort,$order);
+
         header("HTTP:1.1 200 OK");
         echo json_encode($mentors);
     }

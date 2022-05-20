@@ -19,7 +19,6 @@ function execController()
 
 
 
-
     $limit=array_key_exists("limit",$paramsArray)? $paramsArray["limit"]:null;
     $page=array_key_exists("page",$paramsArray)? $paramsArray["page"]:null;
     $sort=array_key_exists("sort",$paramsArray)? $paramsArray["sort"]:null;
@@ -55,7 +54,7 @@ function execController()
         }
     }
     else {
-        echo "else";
+
         switch ($uri[2]) {
             case GROUP_ROUTE_COMPONENT:
                 headers();

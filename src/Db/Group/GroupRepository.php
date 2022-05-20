@@ -17,11 +17,25 @@ class GroupRepository {
         $this->connection = $connection;
     }
 
-    public function getAllGroup( $limit, $page, $sort="id", $order="asc") {
-        $pagination="";
-        if($limit !== null && $page !== null)
-            $pagination=" LIMIT ".intval($limit)." OFFSET ".intval($page);
-        $sql="SELECT id, group_name FROM groupQ ORDER BY ".$sort." ".$order.$pagination;
+    public function getAllGroup( $limit, $page, $sort, $order) {
+
+        if($sort !==null && $order === null) {
+            $orderBy=" ORDER BY ".$sort." asc ";
+        } elseif( $sort ===null && $order!== null) {
+            $orderBy=" ORDER BY id ".$order." ";
+        } elseif( $sort!==null && $order !==null) {
+            $orderBy= " ORDER BY ".$sort." ".$order." ";
+        } else {
+            $orderBy= " ORDER BY id asc ";
+        }
+
+        $pagination=" ";
+        if($limit !== null && $page !== null) {
+            $pagination = " LIMIT " . intval($limit) . " OFFSET " . intval($page);
+        } elseif ( $limit !==null && $page === null) {
+            $pagination= " LIMIT ".intval($limit);
+        }
+        $sql="SELECT id, group_name FROM groupQ ".$orderBy.$pagination;
 
         try {
             $query=$this->connection->query($sql);

@@ -41,10 +41,9 @@ class GroupController {
     }
     private function getAllGroup($sort,$order, $limit, $page)
     {
-        if($sort !== null && $order !== null)
-            $allGroup=$this->repository->getAllGroup($limit, $page,$sort,$order);
-        else
-            $allGroup=$this->repository->getAllGroup($limit, $page);
+
+        $allGroup=$this->repository->getAllGroup($limit, $page,$sort,$order);
+
 
         header("HTTP/1.1 200 OK");
         echo json_encode($allGroup);

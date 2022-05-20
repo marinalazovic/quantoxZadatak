@@ -47,11 +47,8 @@ class InternController {
 
     private function getAllIntern($sort,$order,$limit, $page)
     {
-        if($sort !== null && $order !== null)
-            $interns= $this->repository->getAllIntern($limit, $page,$sort,$order);
-        else
-            $interns= $this->repository->getAllIntern($limit, $page);
 
+        $interns= $this->repository->getAllIntern($limit, $page,$sort,$order);
         header("HTTP/1.1 200 OK");
         echo json_encode($interns);
     }

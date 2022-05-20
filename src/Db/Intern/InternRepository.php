@@ -20,12 +20,26 @@ class InternRepository {
         $this->connection=$connection;
     }
 
-    public function getAllIntern($limit, $page,$sort = "id",$order = "asc"){
+    public function getAllIntern($limit, $page,$sort,$order ){
+
+       if($sort !==null && $order === null) {
+           $orderBy=" ORDER BY ".$sort." asc ";
+       } elseif( $sort ===null && $order!== null) {
+           $orderBy=" ORDER BY id ".$order." ";
+       } elseif( $sort!==null && $order !==null) {
+           $orderBy= " ORDER BY ".$sort." ".$order." ";
+       } else {
+           $orderBy= " ORDER BY id asc ";
+       }
+
         $pagination=" ";
-        if($limit !== null && $page !== null)
-            $pagination=" LIMIT ".intval($limit)." OFFSET ".intval($page);
+        if($limit !== null && $page !== null) {
+            $pagination = " LIMIT " . intval($limit) . " OFFSET " . intval($page);
+        } elseif ( $limit !==null && $page === null) {
+            $pagination= " LIMIT ".intval($limit);
+        }
         $sql= "SELECT i.id as id, i.first_name as first_name, i.last_name as last_name, g.id as group_id ,g.group_name as group_name
-               FROM intern i INNER JOIN groupQ g on i.group_id=g.id ORDER BY ".$sort." ".$order.$pagination;
+               FROM intern i INNER JOIN groupQ g on i.group_id=g.id ".$orderBy.$pagination;
 
         try {
             $query = $this->connection->query($sql);
